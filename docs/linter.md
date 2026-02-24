@@ -25,6 +25,8 @@ For the full list of supported options, run `ruff check --help`.
 
 The set of enabled rules is controlled via the [`lint.select`](settings.md#lint_select),
 [`lint.extend-select`](settings.md#lint_extend-select), and [`lint.ignore`](settings.md#lint_ignore) settings.
+[`lint.extend-ignore`](settings.md#lint_extend-ignore) is also supported as a legacy alias for
+[`lint.ignore`](settings.md#lint_ignore).
 
 Ruff's linter mirrors Flake8's rule code system, in which each rule code consists of a one-to-three
 letter prefix, followed by three digits (e.g., `F401`). The prefix indicates that "source" of the rule
@@ -59,7 +61,12 @@ formats. Ruff will automatically disable any conflicting rules when `ALL` is ena
 
 If you're wondering how to configure Ruff, here are some **recommended guidelines**:
 
-- Prefer [`lint.select`](settings.md#lint_select) over [`lint.extend-select`](settings.md#lint_extend-select) to make your rule set explicit.
+- Use [`lint.select`](settings.md#lint_select) to define a full rule set in one place, and
+    [`lint.extend-select`](settings.md#lint_extend-select) when you want to add rules on top of an
+    existing selection (for example, from an inherited configuration).
+- Prefer [`lint.ignore`](settings.md#lint_ignore) for exclusions.
+    [`lint.extend-ignore`](settings.md#lint_extend-ignore) is interchangeable with
+    [`lint.ignore`](settings.md#lint_ignore), and remains available for backward compatibility.
 - Use `ALL` with discretion. Enabling `ALL` will implicitly enable new rules whenever you upgrade.
 - Start with a small set of rules (`select = ["E", "F"]`) and add a category at-a-time. For example,
     you might consider expanding to `select = ["E", "F", "B"]` to enable the popular flake8-bugbear
@@ -140,6 +147,40 @@ Running `ruff check --select F401` would result in Ruff enforcing `F401`, and no
 
 Running `ruff check --extend-select B` would result in Ruff enforcing the `E`, `F`, and `B` rules,
 with the exception of `F401`.
+
+### `select` and `extend-select` in inherited configurations
+
+When using top-level [`extend`](configuration.md#config-file-discovery), `select` and
+`extend-select` serve different purposes:
+
+- Use `select` to replace the parent's rule selection.
+- Use `extend-select` to keep the parent's selection and add extra rules.
+
+For example, given the following configuration files:
+
+=== "pyproject.toml"
+
+    ```toml
+    [tool.ruff.lint]
+    select = ["E", "F"]
+    extend-select = ["B"]
+    ```
+
+=== "packages/service/pyproject.toml"
+
+    ```toml
+    [tool.ruff]
+    extend = "../../pyproject.toml"
+
+    [tool.ruff.lint]
+    select = ["T201"]
+    ```
+
+The `packages/service` project will only enforce `T201`, because `select` replaces the inherited
+selection.
+
+If `packages/service/pyproject.toml` used `extend-select = ["T201"]` instead, Ruff would enforce
+`E`, `F`, `B`, and `T201`.
 
 ## Fixes
 
