@@ -238,7 +238,7 @@ This test suite contains two tests, one named "Same-file invalid assignment" and
 "Cross-file invalid assignment". The first test involves only a single embedded file, and the second
 test involves two embedded files.
 
-The tests are run independently, in independent in-memory file systems and with new ty
+The tests are run independently, in isolated in-memory file systems and with new ty
 [Salsa](https://github.com/salsa-rs/salsa) databases. This means that each is a from-scratch run of
 the type checker, with no data persisting from any previous test.
 
