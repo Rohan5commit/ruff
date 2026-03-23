@@ -46,7 +46,7 @@ Ruff can be used to replace [Flake8](https://pypi.org/project/flake8/) (plus doz
 [autoflake](https://pypi.org/project/autoflake/), and more, all while executing tens or hundreds of
 times faster than any individual tool.
 
-Ruff is extremely actively developed and used in major open-source projects like:
+Ruff is actively developed and used in major open-source projects like:
 
 - [Apache Airflow](https://github.com/apache/airflow)
 - [Apache Superset](https://github.com/apache/superset)
