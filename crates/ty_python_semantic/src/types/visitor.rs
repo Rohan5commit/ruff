@@ -28,7 +28,7 @@ use std::cell::{Cell, RefCell};
 /// A visitor trait that recurses into nested types.
 ///
 /// The trait does not guard against infinite recursion out of the box,
-/// but it makes it easy for implementors of the trait to do so.
+/// but it makes it easy for implementers of the trait to do so.
 /// See [`any_over_type`] for an example of how to do this.
 pub(crate) trait TypeVisitor<'db> {
     /// Should the visitor trigger inference of and visit lazily-inferred type attributes?
